@@ -8,6 +8,7 @@ import javax.persistence.Entity;
 import javax.persistence.Table;
 
 import com.condelar.cursoS25.entities.pk.OrderItemPK;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name="tb_order_item")
@@ -21,15 +22,21 @@ public class OrderItem implements Serializable {
 	private Integer quantity;
 
 	private Double price;
+	
+	public OrderItem() {
+		
+	}
 
 	public OrderItem(Order order, Product product, Integer quantity, Double price) {
 		super();
+		id = new OrderItemPK();
 		id.setOrder(order);
 		id.setProduct(product);
 		this.quantity = quantity;
 		this.price = price;
 	}
 
+	@JsonIgnore
 	public Order getOrder() {
 		return id.getOrder();
 	}
