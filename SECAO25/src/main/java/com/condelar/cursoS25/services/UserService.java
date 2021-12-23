@@ -3,6 +3,8 @@ package com.condelar.cursoS25.services;
 import java.util.List;
 import java.util.Optional;
 
+import javax.persistence.EntityNotFoundException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -25,7 +27,7 @@ public class UserService {
 
 	public User finfById(Long id) {
 		Optional<User> obj = repository.findById(id);
-		return obj.orElseThrow(()-> new ResourceNotFoundException(id));
+		return obj.orElseThrow(() -> new ResourceNotFoundException(id));
 	}
 
 	public User insert(User obj) {
@@ -35,18 +37,21 @@ public class UserService {
 	public void delete(Long id) {
 		try {
 			repository.deleteById(id);
-		}catch (EmptyResultDataAccessException e) {
+		} catch (EmptyResultDataAccessException e) {
 			throw new ResourceNotFoundException(id);
-		}
-		catch (DataIntegrityViolationException e) {
+		} catch (DataIntegrityViolationException e) {
 			throw new DataBaseException(e.getMessage());
 		}
 	}
 
 	public User update(Long id, User obj) {
-		User vo = repository.findById(id).get();
-		updateData(vo, obj);
-		return repository.save(vo);
+		try {
+			User vo = repository.getById(id); // findById(id).get();
+			updateData(vo, obj);
+			return repository.save(vo);
+		} catch (EntityNotFoundException e) {
+			throw new ResourceNotFoundException(e.getMessage());
+		}
 	}
 
 	private void updateData(User vo, User obj) {
