@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 import com.condelar.workshopmongodb.domain.User;
 import com.condelar.workshopmongodb.dtl.UserDTO;
 import com.condelar.workshopmongodb.repository.UserRepository;
-import com.condelar.workshopmongodb.services.exeption.ObjectNotFondException;	
+import com.condelar.workshopmongodb.services.exeption.ObjectNotFondException;
 
 @Service
 public class UserService {
@@ -20,20 +20,20 @@ public class UserService {
 	public List<User> findAll() {
 		return repo.findAll();
 	}
-	
+
 	public User findById(String id) {
 		Optional<User> user = repo.findById(id);
-		if(user.isEmpty()) {
+		if (user.isEmpty()) {
 			throw new ObjectNotFondException("Objeto não encontrado");
 		}
-		
+
 		return user.get();
 	}
-	
+
 	public User insert(User obj) {
 		return repo.insert(obj);
 	}
-	
+
 	public User fromDTO(UserDTO dto) {
 		return new User(dto.getId(), dto.getName(), dto.getEmail());
 	}
@@ -41,5 +41,16 @@ public class UserService {
 	public void delete(String id) {
 		findById(id);
 		repo.deleteById(id);
+	}
+
+	public User update(User obj) {
+		User newObj = findById(obj.getId());
+		updateData(newObj, obj);
+		return repo.save(newObj);
+	}
+
+	private void updateData(User newObj, User obj) {
+		newObj.setName(obj.getName());
+		newObj.setEmail(obj.getEmail());
 	}
 }
