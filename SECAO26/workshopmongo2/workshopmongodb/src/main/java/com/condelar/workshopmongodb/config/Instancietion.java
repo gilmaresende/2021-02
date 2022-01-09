@@ -44,6 +44,9 @@ public class Instancietion implements CommandLineRunner {
 		postRepository.deleteAll();
 
 		postRepository.saveAll(Arrays.asList(post1, post2));
+		
+		maria.getPost().addAll(Arrays.asList(post1, post2));
+		userReposiroty.save(maria);
 	}
 
 }
