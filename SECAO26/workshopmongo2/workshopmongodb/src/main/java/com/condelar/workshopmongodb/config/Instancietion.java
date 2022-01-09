@@ -10,6 +10,7 @@ import org.springframework.context.annotation.Configuration;
 
 import com.condelar.workshopmongodb.domain.Post;
 import com.condelar.workshopmongodb.domain.User;
+import com.condelar.workshopmongodb.dto.AuthorDTO;
 import com.condelar.workshopmongodb.repository.PostRepository;
 import com.condelar.workshopmongodb.repository.UserRepository;
 
@@ -37,8 +38,8 @@ public class Instancietion implements CommandLineRunner {
 		userReposiroty.saveAll(Arrays.asList(maria, alex, bob));
 
 		Post post1 = new Post(null, sdf.parse("21/03/2018"), "Partiu Viagem", "Vou viajar para Sao Paulo, Abraços.",
-				maria);
-		Post post2 = new Post(null, sdf.parse("23/03/2018"), "Bom dia", "Acordei feliz hoje", maria);
+				new AuthorDTO(maria));
+		Post post2 = new Post(null, sdf.parse("23/03/2018"), "Bom dia", "Acordei feliz hoje", new AuthorDTO(maria));
 
 		postRepository.deleteAll();
 

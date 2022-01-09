@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.condelar.workshopmongodb.domain.User;
-import com.condelar.workshopmongodb.dtl.UserDTO;
+import com.condelar.workshopmongodb.dto.UserDTO;
 import com.condelar.workshopmongodb.services.UserService;
 
 @RestController
