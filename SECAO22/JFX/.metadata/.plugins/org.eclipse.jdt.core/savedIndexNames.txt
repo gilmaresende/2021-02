@@ -1,0 +1,4 @@
+INDEX VERSION 1.131+D:\_Projetos\2021-02\SECAO22\JFX\.metadata\.plugins\org.eclipse.jdt.core
+3873139765.index
+1865797976.index
+4288141048.index
