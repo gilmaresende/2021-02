@@ -74,7 +74,7 @@ public class SellerDaoJDBC implements SellerDao {
 			st.setDouble(4, obj.getBaseSalary());
 			st.setInt(5, obj.getDepartment().getId());
 			st.setInt(6, obj.getId());
-	
+
 			st.executeUpdate();
 		} catch (SQLException e) {
 			throw new DbException(e.getMessage());
@@ -85,8 +85,19 @@ public class SellerDaoJDBC implements SellerDao {
 
 	@Override
 	public void deleteById(Integer id) {
-		// TODO Auto-generated method stub
+		String sql = "DELETE FROM seller WHERE Id = ?\n";
+		PreparedStatement st = null;
+		try {
+			st = conn.prepareStatement(sql);
 
+			st.setInt(1, id);
+
+			st.execute();
+		} catch (SQLException e) {
+			throw new DbException(e.getMessage());
+		} finally {
+			DB.closeConnection();
+		}
 	}
 
 	@Override
