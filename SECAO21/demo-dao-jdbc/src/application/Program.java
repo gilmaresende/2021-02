@@ -1,5 +1,6 @@
 package application;
 
+import java.util.Date;
 import java.util.List;
 
 import model.dao.DaoFactory;
@@ -34,5 +35,16 @@ public class Program {
 		for (Seller s : list2) {
 			System.out.println(s);
 		}
+		
+		/*System.out.println("\n\n=== TEST 4: seller insert ===");
+		Seller s = new Seller(null,"Greg","greg@gmail.com", new Date(), 4000.0, dp);
+		sellerDao.insert(s);
+		System.out.println(s);*/
+		
+		System.out.println("\n\n=== TEST 5: seller insert ===");
+		seller =  sellerDao.findById(1);
+		seller.setName("Martha Wainer");
+		sellerDao.update(seller);
+		System.out.println("Update Complete");
 	}
 }
