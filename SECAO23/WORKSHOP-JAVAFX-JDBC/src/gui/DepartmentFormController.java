@@ -1,9 +1,12 @@
 package gui;
 
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 
 import db.DbException;
+import gui.listeners.DataChangeListener;
 import gui.util.Alerts;
 import gui.util.Contraints;
 import gui.util.Utils;
@@ -31,6 +34,12 @@ public class DepartmentFormController implements Initializable {
 		this.service = service;
 	}
 
+	private List<DataChangeListener> dataChengeListeners = new ArrayList();
+
+	public void subscribeDataChangeListener(DataChangeListener listener) {
+		this.dataChengeListeners.add(listener);
+	}
+
 	@FXML
 	private Button btnSave;
 	@FXML
@@ -53,10 +62,18 @@ public class DepartmentFormController implements Initializable {
 		try {
 			entity = getFormData();
 			this.service.saveOrUpdate(entity);
+			nofifyDataChangeListener();
 			Utils.currentStage(e).close();
 		} catch (DbException ex) {
 			Alerts.showAlert("Error saving obkect", null, ex.getMessage(), AlertType.ERROR);
 		}
+	}
+
+	private void nofifyDataChangeListener() {
+		for (DataChangeListener dataChangeListener : dataChengeListeners) {
+			dataChangeListener.onDataChanger();
+		}
+
 	}
 
 	private Department getFormData() {
