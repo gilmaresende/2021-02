@@ -1,8 +1,12 @@
 package gui;
 
 import java.net.URL;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.Set;
@@ -17,6 +21,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
+import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import model.entities.Seller;
@@ -52,7 +57,19 @@ public class SellerFormController implements Initializable {
 	@FXML
 	private TextField txtName;
 	@FXML
-	private Label txtError;
+	private TextField txtEmail;
+	@FXML
+	private DatePicker txtBrithDate;
+	@FXML
+	private TextField txtBaseSalary;
+	@FXML
+	private Label txtErrorName;
+	@FXML
+	private Label txtErrorEmail;
+	@FXML
+	private Label txtErrorBirthDate;
+	@FXML
+	private Label txtErrorBaseSalar;
 
 	@FXML
 	public void actionBtnSave(ActionEvent e) {
@@ -69,7 +86,7 @@ public class SellerFormController implements Initializable {
 			Utils.currentStage(e).close();
 		} catch (ValidationException ex) {
 			setErrosMessages(ex.getErros());
-		}catch (DbException ex) {
+		} catch (DbException ex) {
 			Alerts.showAlert("Error saving obkect", null, ex.getMessage(), AlertType.ERROR);
 		}
 	}
@@ -83,18 +100,18 @@ public class SellerFormController implements Initializable {
 
 	private Seller getFormData() {
 		ValidationException exception = new ValidationException("Validation Error");
-		
+
 		Seller obj = new Seller();
 		obj.setId(Utils.tryParseToInt(txtId.getText()));
-		if(txtName.getText()== null || txtName.getText().trim().equals("")) {
+		if (txtName.getText() == null || txtName.getText().trim().equals("")) {
 			exception.addErro("name", "Fild can1t be empty.");
 		}
-		
-		if(exception.getErros().size()>0) {
+
+		if (exception.getErros().size() > 0) {
 			throw exception;
 		}
 		obj.setName(txtName.getText());
-		
+
 		return obj;
 	}
 
@@ -110,7 +127,10 @@ public class SellerFormController implements Initializable {
 
 	private void initializeNodes() {
 		Contraints.setTextFieldInteger(txtId);
-		Contraints.setTextFieldMaxLength(txtName, 30);
+		Contraints.setTextFieldMaxLength(txtName, 70);
+		Contraints.setTextFieldDouble(txtBaseSalary);
+		Contraints.setTextFieldMaxLength(txtEmail, 60);
+		Utils.formatDatePicker(txtBrithDate, "dd/MM/yyyy");
 	}
 
 	public void updateFormData() {
@@ -119,12 +139,17 @@ public class SellerFormController implements Initializable {
 		}
 		txtId.setText(String.valueOf(entity.getId()));
 		txtName.setText(entity.getName());
+		txtEmail.setText(entity.getEmail());
+		txtBaseSalary.setText(String.format("%.2f", entity.getBaseSalary()));
+		Locale.setDefault(Locale.US);
+		if (entity.getBirthDate() != null)
+			txtBrithDate.setValue(LocalDate.ofInstant(entity.getBirthDate().toInstant(), ZoneId.systemDefault()));
 	}
-	
+
 	private void setErrosMessages(Map<String, String> erros) {
 		Set<String> fiels = erros.keySet();
-		if(fiels.contains("name")) {
-			txtError.setText(erros.get("name"));
+		if (fiels.contains("name")) {
+			txtErrorName.setText(erros.get("name"));
 		}
 	}
 }
