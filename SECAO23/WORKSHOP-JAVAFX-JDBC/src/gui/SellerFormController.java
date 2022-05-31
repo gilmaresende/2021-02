@@ -1,9 +1,11 @@
 package gui;
 
 import java.net.URL;
+import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -120,11 +122,27 @@ public class SellerFormController implements Initializable {
 		if (txtName.getText() == null || txtName.getText().trim().equals("")) {
 			exception.addErro("name", "Fild can1t be empty.");
 		}
+		obj.setName(txtName.getText());
+
+		if (txtEmail.getText() == null || txtEmail.getText().trim().equals("")) {
+			exception.addErro("email", "Fild can1t be empty.");
+		}
+		obj.setEmail(txtEmail.getText());
+
+		Instant instant = Instant.from(txtBrithDate.getValue().atStartOfDay(ZoneId.systemDefault()));
+		if (txtBrithDate.getValue() == null) {
+			exception.addErro("brithDate", "Fild can1t be empty.");
+		} else
+			obj.setBirthDate(Date.from(instant));
+
+		if (txtBaseSalary.getText() == null || txtBaseSalary.getText().trim().equals("")) {
+			exception.addErro("baseSalary", "Fild can1t be empty.");
+		}
+		obj.setBaseSalary(Utils.tryParseToDouble(txtBaseSalary.getText()));
 
 		if (exception.getErros().size() > 0) {
 			throw exception;
 		}
-		obj.setName(txtName.getText());
 
 		return obj;
 	}
@@ -170,6 +188,15 @@ public class SellerFormController implements Initializable {
 		Set<String> fiels = erros.keySet();
 		if (fiels.contains("name")) {
 			txtErrorName.setText(erros.get("name"));
+		}
+		if (fiels.contains("email")) {
+			txtErrorEmail.setText(erros.get("email"));
+		}
+		if (fiels.contains("birthDate")) {
+			txtErrorBirthDate.setText(erros.get("birthDate"));
+		}
+		if (fiels.contains("baseSalar")) {
+			txtErrorBaseSalar.setText(erros.get("baseSalar"));
 		}
 	}
 
