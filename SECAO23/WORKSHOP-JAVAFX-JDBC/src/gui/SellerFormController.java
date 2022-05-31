@@ -121,25 +121,31 @@ public class SellerFormController implements Initializable {
 		obj.setId(Utils.tryParseToInt(txtId.getText()));
 		if (txtName.getText() == null || txtName.getText().trim().equals("")) {
 			exception.addErro("name", "Fild can1t be empty.");
+		} else {
+			txtErrorName.setText("");
+			obj.setName(txtName.getText());
 		}
-		obj.setName(txtName.getText());
 
 		if (txtEmail.getText() == null || txtEmail.getText().trim().equals("")) {
 			exception.addErro("email", "Fild can1t be empty.");
+		} else {
+			txtErrorEmail.setText("");
+			obj.setEmail(txtEmail.getText());
 		}
-		obj.setEmail(txtEmail.getText());
-
-		Instant instant = Instant.from(txtBrithDate.getValue().atStartOfDay(ZoneId.systemDefault()));
 		if (txtBrithDate.getValue() == null) {
-			exception.addErro("brithDate", "Fild can1t be empty.");
-		} else
+			exception.addErro("birthDate", "Fild can1t be empty.");
+		} else {
+			txtErrorBirthDate.setText("");
+			Instant instant = Instant.from(txtBrithDate.getValue().atStartOfDay(ZoneId.systemDefault()));
 			obj.setBirthDate(Date.from(instant));
-
-		if (txtBaseSalary.getText() == null || txtBaseSalary.getText().trim().equals("")) {
-			exception.addErro("baseSalary", "Fild can1t be empty.");
 		}
-		obj.setBaseSalary(Utils.tryParseToDouble(txtBaseSalary.getText()));
-
+		if (txtBaseSalary.getText() == null || txtBaseSalary.getText().trim().equals("")) {
+			exception.addErro("baseSalar", "Fild can1t be empty.");
+		} else {
+			txtErrorBaseSalar.setText("");
+			obj.setBaseSalary(Utils.tryParseToDouble(txtBaseSalary.getText()));
+		}
+		obj.setDepartment(cmbDepartment.getValue());
 		if (exception.getErros().size() > 0) {
 			throw exception;
 		}
